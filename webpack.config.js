@@ -13,23 +13,8 @@ module.exports = {
         options: { presets: ['@babel/env'] }
       },
       {
-        test: /\.(png|jpg|gif)$/i,
-        loader: 'file-loader',
-        options: {
-          outputPath: 'images',
-          name: '[name]-[contenthash].[ext]'
-        }
-      },
-      {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.(ttf|otf|eot|woff|woff2)$/,
-        loader: 'file-loader',
-        options: {
-          name: './fonts/[name].[ext]'
-        }
       }
     ]
   },
@@ -37,7 +22,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'public/'),
     publicPath: '/public/',
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   devServer: {
     contentBase: path.join(__dirname, 'public/'),
