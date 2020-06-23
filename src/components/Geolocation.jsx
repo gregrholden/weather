@@ -43,7 +43,7 @@ class Geolocation extends Component {
 
   render () {
     return(
-      // Pass browser's geolocation data to the GetWeatherByLatLon component.
+      // Pass browser's geolocation data to the LocationForm component.
       <div>
         <LocationForm lat={this.state.lat} lon={this.state.lon} failMsg={this.state.failMsg} />
       </div>

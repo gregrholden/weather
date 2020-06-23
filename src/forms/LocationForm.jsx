@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import regeneratorRuntime from "regenerator-runtime";
 import CurrentWeather from '../components/CurrentWeather';
 import CurrentForecast from '../components/CurrentForecast';
-import ForecastDetails from '../components/ForecastDetails';
 
 class LocationForm extends Component {
   constructor(props) {
@@ -16,7 +15,6 @@ class LocationForm extends Component {
       temp: null,
       hum: null,
       type: null,
-      desc: null,
       iconSrc: null,
       city: null,
       forecastData: null
@@ -27,9 +25,22 @@ class LocationForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (this.props.lat && this.props.lon) {
-      fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + this.props.lat + '&lon=' + this.props.lon + '&units=imperial&appid=dd2b7c8e91051456d52d9bf3c3ed46cd')
+      // Asynchronous fetch.
+      let request = await fetch(`api.openweathermap.org/data/2.5/weather?lat=${this.props.lat}&lon=${this.props.lon}&units=imperial&appid=dd2b7c8e91051456d52d9bf3c3ed46cd`);
+      let result = await request.json();
+      this.setState({
+        temp: result.main.temp,
+        hum: result.main.humidity,
+        type: result.weather[0].main,
+        desc: result.weather[0].description,
+        iconSrc: 'http://openweathermap.org/img/wn/' + result.weather[0].icon + '@2x.png',
+        city: result.name
+      });
+
+      // Synchronous fetch.
+      /*fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + this.props.lat + '&lon=' + this.props.lon + '&units=imperial&appid=dd2b7c8e91051456d52d9bf3c3ed46cd')
       .then(res => res.json())
       .then(result => {
         this.setState({
@@ -40,7 +51,7 @@ class LocationForm extends Component {
           iconSrc: 'http://openweathermap.org/img/wn/' + result.weather[0].icon + '@2x.png',
           city: result.name
         });
-      });
+      });*/
     }
   };
 
@@ -77,8 +88,8 @@ class LocationForm extends Component {
   }
 
   handleSubmit(event) {
-    this.getWeatherData(this.state.value);
     event.preventDefault();
+    this.getWeatherData(this.state.value);
   }
 
   render() {
@@ -91,9 +102,8 @@ class LocationForm extends Component {
           </label>
           <input type='submit' value="Submit" />
         </form>
-        <CurrentWeather city={this.state.city} temp={this.state.temp} hum={this.state.hum} type={this.state.type} desc={this.state.desc} iconSrc={this.state.iconSrc} />
+        <CurrentWeather city={this.state.city} temp={this.state.temp} hum={this.state.hum} type={this.state.type} iconSrc={this.state.iconSrc} />
         <CurrentForecast city={this.state.city} forecastData={this.state.forecastData} />
-        <ForecastDetails forecastData={this.state.forecastData} />
       </div>
     );
   }
