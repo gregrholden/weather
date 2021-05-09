@@ -40,7 +40,7 @@ class LocationForm extends Component {
       });
 
       // Synchronous fetch.
-      /*fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + this.props.lat + '&lon=' + this.props.lon + '&units=imperial&appid=dd2b7c8e91051456d52d9bf3c3ed46cd')
+      /*fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + this.props.lat + '&lon=' + this.props.lon + '&units=imperial&appid=${API_KEY}')
       .then(res => res.json())
       .then(result => {
         this.setState({
